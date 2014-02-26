@@ -44,13 +44,13 @@
 package com.itextpdf.tool.xml.css.apply;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.html.HtmlUtilities;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.tool.xml.Tag;
 import com.itextpdf.tool.xml.css.CSS;
 import com.itextpdf.tool.xml.css.CssUtils;
 import com.itextpdf.tool.xml.css.FontSizeTranslator;
+import com.itextpdf.tool.xml.html.HTMLUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -89,6 +89,11 @@ public class ChunkCssApplier {
 	 */
     public Chunk apply(final Chunk c, final Tag t) {
         Font f = applyFontStyles(t);
+		// for chinese charater display @www.micmiu.com
+		if (null != HTMLUtils.bfCN && HTMLUtils.isChinese(c.getContent())) {
+			f = new Font(HTMLUtils.bfCN, f.getSize(), f.getStyle(),
+					f.getColor());
+		}
         float size = f.getSize();
         Map<String, String> rules = t.getCSS();
         for (Entry<String, String> entry : rules.entrySet()) {

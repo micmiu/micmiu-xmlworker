@@ -1,5 +1,5 @@
 /*
- * $Id: CssSelector.java 372 2012-10-23 13:40:10Z eugenemark $
+ * $Id: CssSelector.java 287 2012-02-27 16:56:22Z blowagie $
  *
  * This file is part of the iText (R) project.
  * Copyright (c) 1998-2012 1T3XT BVBA
@@ -74,96 +74,6 @@ public class CssSelector {
 		set.addAll(createClassSelectors(t));
 		set.addAll(createIdSelector(t));
 		return set;
-	}
-
-    public void createSelectors(final Tag t, Set<String> selectors) {
-        Set<String> tagNameSet = new LinkedHashSet<String>();
-        for (String selector : selectors) {
-            tagNameSet.add(t.getName() + (selector.startsWith(" ") ? "" : " ") + selector);
-        }
-        Set<String> tagClassSet = new LinkedHashSet<String>();
-        String tagClasses = t.getAttributes().get(HTML.Attribute.CLASS);
-        String[] classSplit = null;
-		if (tagClasses != null) {
-            classSplit = this.utils.stripDoubleSpacesAndTrim(tagClasses).split(" ");
-            for (String selector : selectors) {
-                for (String tagClass : classSplit) {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append('.').append(tagClass);
-                    if (selector.startsWith("#") || selector.startsWith(".") || selector.startsWith(" ")) {
-                        tagClassSet.add(builder.toString() + selector);
-                        if (!selector.startsWith(" ")) {
-                            tagClassSet.add(builder.toString() + " " + selector);
-                        }
-                        for (String tagSelector : tagNameSet) {
-                            builder = new StringBuilder(tagSelector);
-                            builder.append('.').append(tagClass);
-                            tagClassSet.add(builder.toString());
-                        }
-                    } else {
-                        builder.append(" " + selector);
-                        tagClassSet.add(builder.toString());
-                    }
-                }
-            }
-		}
-
-        String id = t.getAttributes().get(HTML.Attribute.ID);
-		Set<String> tagIdSet = new LinkedHashSet<String>(1);
-		if (id != null) {
-            for (String selector : selectors) {
-			    StringBuilder builder = new StringBuilder();
-			    builder.append('#').append(id);
-                if (selector.startsWith("#") || selector.startsWith(".") || selector.startsWith(" ")) {
-                    tagClassSet.add(builder.toString() + selector);
-                    if (!selector.startsWith(" ")) {
-                            tagClassSet.add(builder.toString() + " " + selector);
-                    }
-                } else {
-                    builder.append(" " + selector);
-                    tagClassSet.add(builder.toString());
-                }
-            }
-		}
-
-        if (selectors.isEmpty()) {
-            tagNameSet.add(t.getName());
-            if (tagClasses != null) {
-                for (String tagClass : classSplit) {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append('.').append(tagClass);
-                    tagClassSet.add(builder.toString());
-
-                    builder = new StringBuilder();
-                    builder.append(" .").append(tagClass);
-                    tagClassSet.add(builder.toString());
-
-                    for (String tagSelector : tagNameSet) {
-                            builder = new StringBuilder(tagSelector);
-                            builder.append('.').append(tagClass);
-                            tagClassSet.add(builder.toString());
-                    }
-                }
-            }
-
-            if (id != null) {
-                StringBuilder builder = new StringBuilder();
-                builder.append('#').append(id);
-                tagIdSet.add(builder.toString());
-
-                builder = new StringBuilder();
-                builder.append(" #").append(id);
-                tagIdSet.add(builder.toString());
-            }
-        }
-
-        selectors.addAll(tagNameSet);
-        selectors.addAll(tagClassSet);
-        selectors.addAll(tagIdSet);
-
-        if (t.getParent() != null && selectors.size() < 30) {
-            createSelectors(t.getParent(), selectors);
-        }
 	}
 	/**
 	 * Creates selectors for a given tag.

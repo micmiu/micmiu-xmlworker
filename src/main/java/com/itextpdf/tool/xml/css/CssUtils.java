@@ -1,5 +1,5 @@
 /*
- * $Id: CssUtils.java 367 2012-09-18 14:48:39Z eugenemark $
+ * $Id: CssUtils.java 350 2012-07-23 15:37:10Z eugenemark $
  *
  * This file is part of the iText (R) project.
  * Copyright (c) 1998-2012 1T3XT BVBA
@@ -44,7 +44,11 @@
 package com.itextpdf.tool.xml.css;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.itextpdf.text.html.HtmlTags;
 import com.itextpdf.text.html.WebColors;
@@ -146,7 +150,7 @@ public class CssUtils {
 	 */
 	public Map<String, String> parseBorder(final String border) {
 		HashMap<String, String> map = new HashMap<String, String>(0);
-		String split[] = splitComplexCssStyle(border);
+		String split[] = border.split("\\s");
 		int length = split.length;
 		if (length == 1) {
 			if (borderwidth.contains(split[0]) || isNumericValue(split[0]) || isMetricValue(split[0])) {
@@ -215,7 +219,7 @@ public class CssUtils {
 	 */
 	public Map<String, String> processBackground(final String background) {
 		Map<String, String> rules = new HashMap<String, String>();
-		String[] styles = splitComplexCssStyle(background);
+		String[] styles = background.split("\\s");
 		for(String style : styles) {
 			if (style.contains("url(")) {
 				rules.put(CSS.Property.BACKGROUND_IMAGE, style);
@@ -255,7 +259,7 @@ public class CssUtils {
 	 */
 	public Map<String, String> processListStyle(final String listStyle) {
 		Map<String, String> rules = new HashMap<String, String>();
-		String[] styles = splitComplexCssStyle(listStyle);
+		String[] styles = listStyle.split("\\s");
 		for(String style : styles) {
 			if (style.equalsIgnoreCase(CSS.Value.DISC)
 					|| style.equalsIgnoreCase(CSS.Value.SQUARE)
@@ -615,9 +619,4 @@ public class CssUtils {
 		}
 		return s;
 	}
-
-    public String[] splitComplexCssStyle(String s) {
-        s = s.replaceAll("\\s*,\\s*", ",") ;
-        return s.split("\\s");
-    }
 }

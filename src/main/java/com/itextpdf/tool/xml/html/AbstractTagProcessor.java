@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTagProcessor.java 364 2012-08-29 09:28:23Z achingarev $
+ * $Id: AbstractTagProcessor.java 324 2012-05-07 13:21:08Z eugenemark $
  *
  * This file is part of the iText (R) project.
  * Copyright (c) 1998-2012
@@ -240,7 +240,7 @@ public abstract class AbstractTagProcessor implements TagProcessor, CssAppliersA
 			List<Element> list = new ArrayList<Element>();
 			if (currentContent.size() > 0) {
 				if (addNewLines) {
-					Paragraph p = createParagraph();
+					Paragraph p = new Paragraph(Float.NaN);
                     p.setMultipliedLeading(1.2f);
 					for (Element e : currentContent) {
                         if (e instanceof LineSeparator) {
@@ -306,8 +306,4 @@ public abstract class AbstractTagProcessor implements TagProcessor, CssAppliersA
 	public CssAppliers getCssAppliers() {
 		return cssAppliers;
 	}
-
-    protected Paragraph createParagraph() {
-        return new Paragraph(Float.NaN);
-    }
 }

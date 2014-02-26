@@ -43,16 +43,26 @@
  */
 package com.itextpdf.tool.xml.html;
 
-import com.itextpdf.text.Chunk;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.pdf.BaseFont;
 
 /**
  * @author redlab_b
  *
  */
 public class HTMLUtils {
+	
+	public static BaseFont bfCN = null;
+	static {
+		try {
+			bfCN = BaseFont.createFont("STSongStd-Light", "UniGB-UCS2-H",
+					BaseFont.NOT_EMBEDDED);
+		} catch (Exception e) {
+		}
+	}
 
 	/**
 	 * @param str the string to sanitize
@@ -109,4 +119,29 @@ public class HTMLUtils {
     public static List<Chunk> sanitizeInline(final String str, final boolean preserveWhiteSpace, final boolean replaceNonBreakableSpaces) {
 		return sanitize(str, preserveWhiteSpace, replaceNonBreakableSpaces);
 	}
+    
+    // add by Michael more see：http://www.micmiu.com
+ 	private static final boolean isChinese(char c) {
+ 		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+ 		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+ 				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+ 				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+ 				|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+ 				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+ 				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+ 			return true;
+ 		}
+ 		return false;
+ 	}
+ 	// add by Michael more see：http://www.micmiu.com
+ 	public static final boolean isChinese(String strName) {
+ 		char[] ch = strName.toCharArray();
+ 		for (int i = 0; i < ch.length; i++) {
+ 			char c = ch[i];
+ 			if (isChinese(c)) {
+ 				return true;
+ 			}
+ 		}
+ 		return false;
+ 	}
 }
